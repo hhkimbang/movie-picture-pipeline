@@ -47,7 +47,7 @@ jobs:
         npm ci
         npm run lint 
 
-  after-verify-actions:
+  build-app:
     needs: [run-test, run-lint]
     runs-on: ubuntu-latest
     steps:
