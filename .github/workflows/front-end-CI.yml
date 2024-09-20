@@ -1,0 +1,56 @@
+name: front-end-ci
+
+on:
+  pull_requests:
+    branch: main
+    paths: ./starter/frontend
+  workflow_dispatch:
+
+env:
+  ENV_VAR: dev
+  REACT_APP_MOVIE_API_URL: 'http://localhost:5000'
+
+jobs:
+  run-test:
+    run-on: ubuntu-latest
+    
+    steps:
+    - name: checkout
+      uses: action/checkout@v3
+
+    - name: prepare node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: 18
+    
+    - name: Install, Test
+      working-directory: ./starter/frontend
+      run: | 
+        npm ci
+        npm run test
+
+  run-lint:
+    run-on: ubuntu-latest
+    
+    steps:
+    - name: checkout
+      uses: action/checkout@v3
+
+    - name: prepare node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: 18
+    
+    - name: Install, Lint
+      working-directory: ./starter/frontend
+      run: | 
+        npm ci
+        npm run lint 
+
+  after-verify-actions:
+    needs: [run-test, run-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: build app
+      working-directory: ./starter/frontend
+      run: docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} .
