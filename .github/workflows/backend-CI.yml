@@ -82,4 +82,4 @@ jobs:
         IMAGE_TAG: ${{github.run_number}}
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-        docker push $1/$REPOSITORY:$IMAGE_TAG
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
