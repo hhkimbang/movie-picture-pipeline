@@ -68,18 +68,18 @@ jobs:
     # - name: build app
     #   run: docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} .
     - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
     - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: "true"
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        mask-password: "true"
     - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name cluster
+      run: aws eks update-kubeconfig --name cluster
     - name: Run setup init.sh
       working-directory: ./setup
       run: ./init.sh || true
