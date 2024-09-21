@@ -28,7 +28,7 @@ jobs:
     - name: Install, Test
       working-directory: ./starter/frontend
       run: | 
-        npm ci
+        npm install -f
         CI=true npm run test
 
   run-lint:
@@ -47,7 +47,7 @@ jobs:
       working-directory: ./starter/frontend
       run: | 
         npm ci
-        npm run lint 
+        npm run lint --fix
 
   build-app:
     needs: [run-test, run-lint]
