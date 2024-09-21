@@ -29,8 +29,8 @@ jobs:
       with:
         path: ~/.npm
         key: npm-${{ hashFiles('frontend/package-lock.json') }}
-        restore-keys: 
-        - npm-
+        restore-keys: |
+          npm-
     - name: Install
       run: | 
         npm ci

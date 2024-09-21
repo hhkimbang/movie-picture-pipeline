@@ -28,8 +28,8 @@ jobs:
       with:
         path: ~/.cache/pipenv
         key: pipenv-${{ hashFiles('**/Pipfile.lock') }}
-        restore-keys: 
-        - pipenv-
+        restore-keys: |
+          pipenv-
     - name: Install
       run: | 
         pip install pipenv
