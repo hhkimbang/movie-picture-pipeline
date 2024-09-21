@@ -12,7 +12,7 @@ env:
 
 jobs:
   run-test:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     
     steps:
     - name: checkout
@@ -30,7 +30,7 @@ jobs:
         npm run test
 
   run-lint:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     
     steps:
     - name: checkout
