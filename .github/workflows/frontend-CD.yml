@@ -1,0 +1,96 @@
+name: frontend-cd
+
+on:
+  pull_request:
+    branches: 
+    - master
+    paths: ./starter/frontend
+  workflow_dispatch:
+
+env:
+  ENV_VAR: dev
+  NODE_VER: 18.x
+  REACT_APP_MOVIE_API_URL: 'http://localhost:5000'
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./starter/frontend
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: prepare node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: ${{env.NODE_VER}}
+    - name: Install
+      run: | 
+        npm ci
+    - name: Run tests
+      run: |
+        npm run test --passWithNoTests
+
+  run-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./starter/frontend
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: prepare node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: ${{env.NODE_VER}}
+    - name: Install 
+      run: | 
+        npm ci
+    - name: Run lint
+      run: |
+        npm run lint -- --fix
+
+  build-app:
+    needs: [run-test, run-lint]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./starter/frontend
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: Install
+      run: | 
+        npm ci
+    # - name: build app
+    #   run: docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} .
+    - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+    - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+    - name: Build, Tag, and Push docker image
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: frontend
+          IMAGE_TAG: ${{github.run_number}}
+        run: |
+          aws eks update-kubeconfig --name cluster
+          export PUBLIC_IP_ADDR=$(kubectl get svc backend -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}{"\n"}{.status.loadBalancer.ingress[0].ip}')
+          echo $PUBLIC_IP_ADDR
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg=REACT_APP_MOVIE_API_URL=http://$PUBLIC_IP_ADDR .
+          docker images
+
+      - name: Cache Docker image
+        uses: actions/cache@v3
+        with:
+          path: ~/docker-cache
+          key: docker-${{ github.sha }}-frontend

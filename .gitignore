@@ -1,0 +1,4 @@
+setup/terraform/.terraform.lock.hcl
+/workspace/setup/terraform/.terraform
+setup/terraform/.terraform.lock.hcl
+setup/terraform/.terraform/
