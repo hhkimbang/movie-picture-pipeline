@@ -14,34 +14,28 @@ env:
 jobs:
   run-test:
     runs-on: ubuntu-latest
-    
     steps:
     - name: checkout
       uses: actions/checkout@v3
-
     - name: prepare node
       uses: actions/setup-node@v3
       with: 
-        node-version: 18
-    
+        node-version: ${{env.NODE_VER}}
     - name: Install, Test
       working-directory: ./starter/frontend
       run: | 
         npm ci
-        npm run test
+        npm test
 
   run-lint:
     runs-on: ubuntu-latest
-    
     steps:
     - name: checkout
       uses: actions/checkout@v3
-
     - name: prepare node
       uses: actions/setup-node@v3
       with: 
-        node-version: 18
-    
+        node-version: 20
     - name: Install, Lint
       working-directory: ./starter/frontend
       run: | 

@@ -9,6 +9,7 @@ on:
 
 env:
   ENV_VAR: dev
+  NODE_VER: 20
   REACT_APP_MOVIE_API_URL: 'http://localhost:5000'
 
 jobs:
@@ -22,13 +23,13 @@ jobs:
     - name: prepare node
       uses: actions/setup-node@v3
       with: 
-        node-version: 18
+        node-version: ${{env.NODE_VER}}
     
     - name: Install, Test
       working-directory: ./starter/frontend
       run: | 
         npm ci
-        npm run test
+        CI=true npm run test
 
   run-lint:
     runs-on: ubuntu-latest
@@ -40,7 +41,7 @@ jobs:
     - name: prepare node
       uses: actions/setup-node@v3
       with: 
-        node-version: 18
+        node-version: ${{env.NODE_VER}}
     
     - name: Install, Lint
       working-directory: ./starter/frontend
