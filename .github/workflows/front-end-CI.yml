@@ -30,8 +30,8 @@ jobs:
       run: | 
         npm install -f
     - name: Run tests
-        run: |
-          npm run test
+      run: |
+        npm run test
 
   run-lint:
     runs-on: ubuntu-latest
@@ -50,8 +50,8 @@ jobs:
       run: | 
         npm ci
     - name: Run lint
-        run: |
-          npm run lint -- --fix
+      run: |
+        npm run lint -- --fix
 
   build-app:
     needs: [run-test, run-lint]
