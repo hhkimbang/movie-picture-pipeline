@@ -83,7 +83,7 @@ jobs:
         REPOSITORY: backend
         IMAGE_TAG: latest
       working-directory: ./backend/k8s
-      run: kustomize edit set image backend=$REGISTRY/$REPOSITORY
+      run: kustomize edit set image backend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
     - name: Apply Kubernetes resources
       working-directory: ./backend/k8s
       run: kustomize build | kubectl apply -f -
