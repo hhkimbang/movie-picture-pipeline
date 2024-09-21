@@ -59,11 +59,6 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v3
-    - name: Install
-      run: | 
-        npm ci
-    # - name: build app
-    #   run: docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} .
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
