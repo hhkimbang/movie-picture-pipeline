@@ -15,6 +15,9 @@ env:
 jobs:
   run-test:
     runs-on: ubuntu-latest
+    default:
+      run:
+        working-directory: ./starter/frontend
     
     steps:
     - name: checkout
@@ -26,7 +29,6 @@ jobs:
         node-version: ${{env.NODE_VER}}
     
     - name: Install
-      working-directory: ./starter/frontend
       run: | 
         npm install -f
     - name: Run tests
@@ -35,6 +37,9 @@ jobs:
 
   run-lint:
     runs-on: ubuntu-latest
+    default:
+      run:
+        working-directory: ./starter/frontend
     
     steps:
     - name: checkout
@@ -46,7 +51,6 @@ jobs:
         node-version: ${{env.NODE_VER}}
     
     - name: Install 
-      working-directory: ./starter/frontend
       run: | 
         npm ci
     - name: Run lint
