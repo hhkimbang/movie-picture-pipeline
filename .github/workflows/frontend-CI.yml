@@ -85,9 +85,4 @@ jobs:
         export PUBLIC_IP_ADDR=$(kubectl get svc backend -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}{"\n"}{.status.loadBalancer.ingress[0].ip}')
         echo $PUBLIC_IP_ADDR
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg=REACT_APP_MOVIE_API_URL=http://$PUBLIC_IP_ADDR .
-        docker images
-    - name: Cache Docker image
-      uses: actions/cache@v3
-      with:
-        path: ~/docker-cache
-        key: docker-${{ github.sha }}-frontend
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG

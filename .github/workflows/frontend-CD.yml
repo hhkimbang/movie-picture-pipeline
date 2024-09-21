@@ -77,19 +77,20 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       with:
         mask-password: "true"
-    - name: Build, Tag, and Push docker image
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --name cluster
+    - name: Run setup init.sh
+      working-directory: ./setup
+      run: |
+        chmod +x init.sh
+        ./init.sh || true
+    - name: Set Docker image in Kustomize
       env:
         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         REPOSITORY: frontend
         IMAGE_TAG: latest
-      run: |
-        aws eks update-kubeconfig --name cluster
-        export PUBLIC_IP_ADDR=$(kubectl get svc backend -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}{"\n"}{.status.loadBalancer.ingress[0].ip}')
-        echo $PUBLIC_IP_ADDR
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg=REACT_APP_MOVIE_API_URL=http://$PUBLIC_IP_ADDR .
-        docker images
-    - name: Cache Docker image
-      uses: actions/cache@v3
-      with:
-        path: ~/docker-cache
-        key: docker-${{ github.sha }}-frontend
+      working-directory: ./starter/frontend/k8s
+      run: kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+    - name: Apply Kubernetes resources
+      working-directory: ./starter/frontend/k8s
+      run: kustomize build | kubectl apply -f -
