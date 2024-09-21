@@ -2,7 +2,8 @@ name: front-end-cd
 
 on:
   pull_request:
-    branches: master
+    branches: 
+    - master
     paths: ./starter/frontend
   workflow_dispatch:
 
