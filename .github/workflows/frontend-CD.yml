@@ -30,7 +30,7 @@ jobs:
         npm ci
     - name: Run tests
       run: |
-        npm run test --passWithNoTests
+        npm run test -- --passWithNoTests
 
   run-lint:
     runs-on: ubuntu-latest
