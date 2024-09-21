@@ -15,7 +15,7 @@ env:
 jobs:
   run-test:
     runs-on: ubuntu-latest
-    default:
+    defaults:
       run:
         working-directory: ./starter/frontend
     
@@ -37,7 +37,7 @@ jobs:
 
   run-lint:
     runs-on: ubuntu-latest
-    default:
+    defaults:
       run:
         working-directory: ./starter/frontend
     
