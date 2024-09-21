@@ -2,7 +2,7 @@ name: front-end-ci
 
 on:
   pull_request:
-    branches: main
+    branches: master
     paths: ./starter/frontend
   workflow_dispatch:
 
