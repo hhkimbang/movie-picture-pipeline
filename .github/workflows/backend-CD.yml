@@ -1,11 +1,6 @@
 name: backend-cd
 
 on:
-  pull_request:
-    branches: 
-    - master
-    paths: 
-    - 'starter/backend/**'
   push:
     branches: 
     - master

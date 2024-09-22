@@ -6,11 +6,6 @@ on:
     - master
     paths: 
     - 'starter/frontend/**'
-  push:
-    branches: 
-    - master
-    paths: 
-    - 'starter/frontend/**'
   workflow_dispatch:
 
 env:

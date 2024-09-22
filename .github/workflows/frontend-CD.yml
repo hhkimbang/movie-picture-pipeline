@@ -1,11 +1,6 @@
 name: frontend-cd
 
 on:
-  pull_request:
-    branches: 
-    - master
-    paths: 
-    - 'starter/frontend/**'
   push:
     branches: 
     - master
