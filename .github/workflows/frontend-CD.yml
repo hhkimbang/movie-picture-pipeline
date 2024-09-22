@@ -97,6 +97,13 @@ jobs:
         echo $PUBLIC_IP_ADDR
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg=REACT_APP_MOVIE_API_URL=http://$PUBLIC_IP_ADDR .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+    - name: Cache Docker layers
+      uses: actions/cache@v4
+      with:
+        path: ~/docker-cache
+        key: frontend-${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          frontend-${{ runner.os }}-buildx-
 
   deploy-app:
     needs: [run-test, run-lint]

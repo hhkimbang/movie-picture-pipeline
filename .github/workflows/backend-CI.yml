@@ -98,3 +98,10 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+    - name: Cache Docker layers
+      uses: actions/cache@v4
+      with:
+        path: ~/docker-cache
+        key: backend-${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          backend-${{ runner.os }}-buildx-
