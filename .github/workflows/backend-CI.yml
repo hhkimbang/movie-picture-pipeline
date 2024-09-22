@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: 
     - master
-    paths: ./starter/backend
+    paths: /starter/backend/**
   workflow_dispatch:
 
 env:
